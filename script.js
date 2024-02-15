@@ -46,6 +46,7 @@ const parseInput = (e) => {
           break;
         case "=":
           eqPressed++;
+          input.value = 0;
           if (eqPressed === 1) {
             console.log(displayValue);
             displayValue.push(currInp);
@@ -68,12 +69,16 @@ const parseInput = (e) => {
       if (buttonValue !== "DEL" && buttonValue !== "=") {
         input.value = "";
         currentInput = "";
+        output.innerText = displayValue.join("");
       }
-      output.innerText = displayValue.join("");
-    } else if (buttonValue === "AC") {
+    }
+
+    if (buttonValue === "AC") {
       displayValue.splice(0);
-      output.innerHTML = "";
-    } else if (buttonValue === "DEL") {
+      output.innerText = "";
+    }
+
+    if (buttonValue === "DEL") {
       if (currentAns !== "Infinity" && currentAns !== "-Infinity") {
         input.value = input.value.substring(0, input.value.length - 1);
       }
@@ -102,5 +107,55 @@ const calcValue = () => {
 };
 
 items.forEach((e) => {
-  e.setAttribute("onclick", "parseInput(event)");
+  e.setAttribute("onclick", "parseInput2(event)");
 });
+
+const parseInput2 = (e) => {
+  const buttonValue = e.target.textContent;
+
+  // normal digits
+  if (!nonInputValues.includes(buttonValue)) {
+    if (!(buttonValue === "." && input.value.includes(buttonValue))) {
+      input.value += buttonValue;
+    }
+  }
+
+  if (nonInputValues.includes(buttonValue)) {
+    const isNan = input.value.trim() === "";
+    const currInp = parseFloat(input.value);
+
+    // - digits
+    if (isNan && buttonValue == "-") {
+      input.value += "-";
+    }
+
+    if (!isNan && !["AC", "DEL", "="].includes(buttonValue)) {
+      eqPressed = 0;
+      displayValue.push(currInp, buttonValue);
+      input.value = "";
+    }
+
+    if (buttonValue === "=") {
+      eqPressed++;
+      input.value = "";
+      const lastValues = displayValue.slice(-2);
+      if (eqPressed === 1) {
+        displayValue.push(currInp);
+        calcValue();
+        displayValue.splice(0);
+        input.value = currentAns;
+      } else {
+        displayValue.push(...lastValues);
+        calcValue();
+        input.value = currentAns;
+      }
+    }
+
+    if (buttonValue === "AC") {
+      displayValue.splice(0);
+      output.innerHTML = "";
+      input.value = "";
+    }
+  }
+  console.log(displayValue);
+};
