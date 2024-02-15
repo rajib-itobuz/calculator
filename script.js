@@ -143,11 +143,17 @@ const parseInput2 = (e) => {
         displayValue.push(currInp);
         calcValue();
         displayValue.splice(0);
-        input.value = currentAns;
+        setInterval(() => {
+          input.value = currentAns;
+          output.innerText = currentAns;
+        }, 100);
       } else {
         displayValue.push(...lastValues);
         calcValue();
-        input.value = currentAns;
+        setInterval(() => {
+          input.value = currentAns;
+          output.innerText = currentAns;
+        }, 100);
       }
     }
 
@@ -156,6 +162,13 @@ const parseInput2 = (e) => {
       output.innerHTML = "";
       input.value = "";
     }
+
+    if (buttonValue === "DEL") {
+      // if (input.value.trim() != "") {
+      // }
+    }
   }
+
+  output.innerText = displayValue.join(" ");
   console.log(displayValue);
 };
