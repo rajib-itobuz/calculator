@@ -1,5 +1,6 @@
 $light-linear-gradient: linear-gradient(90deg, #FDBB2D 0%, #22C1C3 100%);
-$dark-linear-gradient: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+$dark-linear-gradient: linear-gradient(to right, #c31432, #240b36);
+// linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
 
 * {
   margin: 0;
@@ -79,7 +80,7 @@ input {
   }
 
   .item {
-    background-color: rgba($color: #000, $alpha: 0.8);
+    background-color: rgba($color: #000, $alpha: 0.3);
     backdrop-filter: blur(5px);
     color: white;
   }

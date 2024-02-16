@@ -66,7 +66,7 @@ input {
 }
 
 .theme-dark {
-  background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+  background: linear-gradient(to right, #c31432, #240b36);
 }
 .theme-dark #calc-container {
   background-color: rgba(0, 0, 0, 0.3);
@@ -76,7 +76,7 @@ input {
   color: white;
 }
 .theme-dark .item {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.3);
   -webkit-backdrop-filter: blur(5px);
           backdrop-filter: blur(5px);
   color: white;
