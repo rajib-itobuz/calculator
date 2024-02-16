@@ -40,7 +40,7 @@ const parseInput2 = (e) => {
       eqPressed++;
       input.value = "";
       const lastValues = expression.slice(-2);
-
+      console.log(lastValues);
       if (eqPressed === 1) {
         if (!isNan && currInp > 0) expression.push(currInp);
         else if (!isNan && currInp < 0) expression.push("+", currInp);
@@ -161,7 +161,6 @@ const convertToPostfix = () => {
 // now calculate infix value using stack
 const calculateInfix = (postfixArray) => {
   const infixStack = [];
-  console.log(postfixArray);
 
   postfixArray.forEach((e) => {
     if (typeof e === "number") {
@@ -169,9 +168,6 @@ const calculateInfix = (postfixArray) => {
     } else {
       const val1 = infixStack.pop();
       const val2 = infixStack.pop();
-
-      console.log(e, val1, val2);
-
       switch (e) {
         case "*":
           infixStack.push(val2 * val1);
@@ -187,6 +183,7 @@ const calculateInfix = (postfixArray) => {
           break;
         case "!":
           let element = val1;
+          console.log(val1, !val2);
           if (val1 > 0) {
             for (let index = 1; index < val1; index++) {
               element *= index;
@@ -194,7 +191,8 @@ const calculateInfix = (postfixArray) => {
           } else if (val1 === 0) {
             element = 1;
           }
-          infixStack.push(val2, element);
+          if (val2) infixStack.push(val2);
+          infixStack.push(element);
           break;
         case "^":
           const expValue = val2 ** val1;
