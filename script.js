@@ -1,114 +1,12 @@
 const items = document.querySelectorAll(".item");
 const input = document.getElementById("input-bar");
 const output = document.getElementById("output");
+const themeChangeButton = document.getElementById("themeChange");
 
-const nonInputValues = ["AC", "DEL", "/", "*", "-", "+", "="];
-const displayValue = [];
-let currentAns = 0;
+const nonInputValues = ["AC", "DEL", "/", "*", "-", "+", "=", "%", "^", "π"];
+const expression = [];
 let eqPressed = 0;
-
-const parseInput = (e) => {
-  const buttonValue = e.target.textContent;
-
-  // normal digits
-  if (!nonInputValues.includes(buttonValue)) {
-    if (!(buttonValue === "." && input.value.includes(buttonValue))) {
-      input.value += buttonValue;
-    }
-  }
-
-  if (nonInputValues.includes(buttonValue)) {
-    const isNan = input.value.trim() === "";
-    const currInp = parseFloat(input.value);
-
-    // - digits
-    if (isNan && buttonValue == "-") {
-      input.value += "-";
-    }
-
-    if (!isNan) {
-      switch (buttonValue) {
-        case "*":
-          eqPressed = 0;
-          displayValue.push(currInp, "*");
-          break;
-        case "-":
-          eqPressed = 0;
-          displayValue.push(currInp, "-");
-          break;
-        case "+":
-          eqPressed = 0;
-          displayValue.push(currInp, "+");
-          break;
-        case "/":
-          eqPressed = 0;
-          displayValue.push(currInp, "/");
-          break;
-        case "=":
-          eqPressed++;
-          input.value = 0;
-          if (eqPressed === 1) {
-            console.log(displayValue);
-            displayValue.push(currInp);
-            calcValue();
-            setTimeout(() => {
-              // input.value = currentAns.toFixed(2);
-              output.innerText = currentAns.toFixed(2);
-            }, 100);
-          } else {
-            const lastElements = displayValue.slice(-2);
-            displayValue.push(...lastElements);
-            calcValue();
-            setTimeout(() => {
-              output.innerText = currentAns;
-            }, 100);
-          }
-          break;
-      }
-
-      if (buttonValue !== "DEL" && buttonValue !== "=") {
-        input.value = "";
-        currentInput = "";
-        output.innerText = displayValue.join("");
-      }
-    }
-
-    if (buttonValue === "AC") {
-      displayValue.splice(0);
-      output.innerText = "";
-    }
-
-    if (buttonValue === "DEL") {
-      if (currentAns !== "Infinity" && currentAns !== "-Infinity") {
-        input.value = input.value.substring(0, input.value.length - 1);
-      }
-    }
-  }
-};
-
-const calcValue = () => {
-  currentAns = displayValue[0];
-  for (let index = 0; index < displayValue.length; index += 2) {
-    switch (displayValue[index + 1]) {
-      case "*":
-        currentAns *= displayValue[index + 2];
-        break;
-      case "+":
-        currentAns += displayValue[index + 2];
-        break;
-      case "-":
-        currentAns -= displayValue[index + 2];
-        break;
-      case "/":
-        currentAns /= displayValue[index + 2];
-        break;
-    }
-  }
-};
-
-items.forEach((e) => {
-  e.setAttribute("onclick", "parseInput2(event)");
-});
+const operators = ["^", "*", "/", "-", "+", "%"];
 
 const parseInput2 = (e) => {
   const buttonValue = e.target.textContent;
@@ -118,57 +16,223 @@ const parseInput2 = (e) => {
     if (!(buttonValue === "." && input.value.includes(buttonValue))) {
       input.value += buttonValue;
     }
-  }
-
-  if (nonInputValues.includes(buttonValue)) {
+  } else {
     const isNan = input.value.trim() === "";
     const currInp = parseFloat(input.value);
 
     // - digits
     if (isNan && buttonValue == "-") {
+      eqPressed = 0;
       input.value += "-";
     }
 
-    if (!isNan && !["AC", "DEL", "="].includes(buttonValue)) {
+    if (!isNan && !["AC", "DEL", "=", "π"].includes(buttonValue)) {
       eqPressed = 0;
-      displayValue.push(currInp, buttonValue);
+      expression.push(currInp, buttonValue);
+      input.value = "";
+    } else if (!["AC", "DEL", "=", "-", "^", "=", "π"].includes(buttonValue)) {
+      eqPressed = 0;
+      expression.push(buttonValue);
       input.value = "";
     }
 
     if (buttonValue === "=") {
       eqPressed++;
       input.value = "";
-      const lastValues = displayValue.slice(-2);
+      const lastValues = expression.slice(-2);
+
       if (eqPressed === 1) {
-        displayValue.push(currInp);
-        calcValue();
-        displayValue.splice(0);
-        setInterval(() => {
-          input.value = currentAns;
-          output.innerText = currentAns;
+        if (!isNan && currInp > 0) expression.push(currInp);
+        else if (!isNan && currInp < 0) expression.push("+", currInp);
+
+        const postfixExp = convertToPostfix();
+        const value = calculateInfix(postfixExp);
+
+        setTimeout(() => {
+          if (typeof value != "boolean") {
+            output.innerText = value;
+          } else {
+            output.innerText = "Err";
+          }
         }, 100);
       } else {
-        displayValue.push(...lastValues);
-        calcValue();
-        setInterval(() => {
-          input.value = currentAns;
-          output.innerText = currentAns;
+        expression.push(...lastValues);
+
+        const postfixExp = convertToPostfix();
+        const value = calculateInfix(postfixExp);
+
+        setTimeout(() => {
+          if (typeof value != "boolean") {
+            output.innerText = value;
+          } else {
+            output.innerText = "Err";
+          }
         }, 100);
       }
     }
 
     if (buttonValue === "AC") {
-      displayValue.splice(0);
+      eqPressed = 0;
+      expression.splice(0);
       output.innerHTML = "";
       input.value = "";
     }
 
+    if (buttonValue === "π") {
+      expression.push(3.14);
+      eqPressed = 0;
+    }
+
     if (buttonValue === "DEL") {
-      // if (input.value.trim() != "") {
-      // }
+      eqPressed = 0;
+      if (input.value !== "") {
+        input.value = input.value.substring(0, input.value.length - 1);
+      } else if (input.value == "") {
+        if (expression.length > 1) {
+          const lastExpression = expression.pop();
+
+          if (lastExpression.length > 1) {
+            const modifiedLastExpression = lastExpression.substring(
+              0,
+              lastExpression.length - 1
+            );
+            expression.push(modifiedLastExpression);
+          }
+        }
+      }
     }
   }
 
-  output.innerText = displayValue.join(" ");
-  console.log(displayValue);
+  output.innerText = expression.join(" ");
 };
+
+const changeTheme = (e) => {
+  const classList = document.body.classList;
+
+  if (classList.contains("theme-light"))
+    classList.replace("theme-light", "theme-dark");
+  else classList.replace("theme-dark", "theme-light");
+};
+
+// calculate precedence of operators
+var precedence = (e) => {
+  switch (e) {
+    case "^":
+      return 4;
+    case "*":
+    case "/":
+    case "%":
+      return 3;
+    case "+":
+    case "-":
+      return 1;
+    default:
+      return 0;
+  }
+};
+
+// convert to postfix inorder to calculate in computer way
+const convertToPostfix = () => {
+  const postfixStack = [];
+  const operatorStack = [];
+
+  for (i in expression) {
+    const current = expression[i];
+
+    if (typeof current === "number") {
+      postfixStack.push(current);
+    } else if (operators.includes(current)) {
+      while (
+        operatorStack.length > 0 &&
+        precedence(current) <= precedence(operatorStack.at(-1))
+      ) {
+        postfixStack.push(operatorStack.pop());
+      }
+      operatorStack.push(current);
+    }
+  }
+
+  operatorStack.reverse().forEach((e) => postfixStack.push(e));
+  return postfixStack;
+};
+
+// now calculate infix value using stack
+const calculateInfix = (postfixArray) => {
+  const infixStack = [];
+
+  postfixArray.forEach((e) => {
+    if (typeof e === "number") {
+      infixStack.push(e);
+    } else {
+      const val1 = infixStack.pop();
+      const val2 = infixStack.pop();
+      switch (e) {
+        case "*":
+          infixStack.push(val2 * val1);
+          break;
+        case "/":
+          infixStack.push(val2 / val1);
+          break;
+        case "-":
+          infixStack.push(val2 - val1);
+          break;
+        case "+":
+          infixStack.push(val2 + val1);
+          break;
+        case "%":
+          if (typeof val2 === "undefined") infixStack.push(val1 / 100);
+          else {
+            infixStack.push(val2, (val2 * val1) / 100);
+          }
+          break;
+        case "^":
+          const expValue = val2 ** val1;
+          infixStack.push(expValue);
+          break;
+      }
+    }
+  });
+
+  return infixStack.length === 1 ? infixStack.pop() : false;
+};
+
+items.forEach((e) => {
+  e.setAttribute("onclick", "parseInput2(event)");
+});
+
+addEventListener("keyup", (event) => {
+  if (
+    [
+      "Enter",
+      "Backspace",
+      " ",
+      "/",
+      "*",
+      "-",
+      "+",
+      "=",
+      "%",
+      "^",
+      ".",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "0",
+    ].includes(event.key)
+  ) {
+    if (event.key === " ") parseInput2({ target: { textContent: "AC" } });
+    else if (event.key === "Backspace")
+      parseInput2({ target: { textContent: "DEL" } });
+    else if (event.key === "Enter")
+      parseInput2({ target: { textContent: "=" } });
+    else {
+      parseInput2({ target: { textContent: event.key } });
+    }
+  }
+});
