@@ -10,25 +10,17 @@ body {
   height: 100vh;
   display: grid;
   place-items: center;
-}
-
-.theme-dark {
-  background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
-}
-
-.theme-light {
-  background: linear-gradient(90deg, #FDBB2D 0%, #22C1C3 100%);
+  transition: all 0.2s ease;
 }
 
 #calc-container {
   height: -moz-fit-content;
   height: fit-content;
-  min-height: 600px;
+  max-height: 750px;
   width: 90%;
   max-width: 500px;
-  background-color: rgba(255, 255, 255, 0.8);
   -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
 }
 
 .button-grid {
@@ -55,9 +47,6 @@ input {
 
 .item {
   height: 70px;
-  background-color: rgba(255, 255, 255, 0.8);
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
 }
 
 .item:nth-child(21) {
@@ -76,4 +65,42 @@ input {
   color: white;
 }
 
-/*# sourceMappingURL=style.css.map */
+.theme-dark {
+  background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+}
+.theme-dark #calc-container {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+}
+.theme-dark input {
+  color: white;
+}
+.theme-dark .item {
+  background-color: rgba(0, 0, 0, 0.8);
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+  color: white;
+}
+.theme-dark #themeChangeButton {
+  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(63deg) brightness(105%) contrast(104%);
+}
+
+.theme-light {
+  background: linear-gradient(90deg, #FDBB2D 0%, #22C1C3 100%);
+}
+.theme-light #calc-container {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+}
+.theme-light input {
+  color: #000;
+}
+.theme-light .item {
+  background-color: rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+  color: black;
+}
+.theme-light #themeChangeButton {
+  filter: none;
+}/*# sourceMappingURL=style.css.map */

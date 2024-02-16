@@ -13,24 +13,14 @@ body {
   height: 100vh;
   display: grid;
   place-items: center;
+  transition: all 0.2s ease;
 }
-
-
-.theme-dark {
-  background: $dark-linear-gradient;
-}
-
-.theme-light {
-  background: $light-linear-gradient;
-}
-
 
 #calc-container {
   height: fit-content;
-  min-height: 600px;
+  max-height: 750px;
   width: 90%;
   max-width: 500px;
-  background-color: rgba($color: white, $alpha: 0.8);
   backdrop-filter: blur(5px);
 }
 
@@ -58,8 +48,6 @@ input {
 
 .item {
   height: 70px;
-  background-color: rgba($color: white, $alpha: 0.8);
-  backdrop-filter: blur(5px);
 }
 
 .item:nth-child(21) {
@@ -76,4 +64,50 @@ input {
 .item:nth-child(5) {
   background-color: #ff9500;
   color: white;
+}
+
+.theme-dark {
+  background: $dark-linear-gradient;
+
+  #calc-container {
+    background-color: rgba($color: #000, $alpha: 0.3);
+    color: white;
+  }
+
+  input {
+    color: white;
+  }
+
+  .item {
+    background-color: rgba($color: #000, $alpha: 0.8);
+    backdrop-filter: blur(5px);
+    color: white;
+  }
+
+  #themeChangeButton {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(63deg) brightness(105%) contrast(104%);
+  }
+}
+
+.theme-light {
+  background: $light-linear-gradient;
+
+  #calc-container {
+    background-color: rgba($color: white, $alpha: 0.8);
+    color: black;
+  }
+
+  input {
+    color: #000;
+  }
+
+  .item {
+    background-color: rgba($color: #fff, $alpha: 0.8);
+    backdrop-filter: blur(5px);
+    color: black;
+  }
+
+  #themeChangeButton {
+    filter: none;
+  }
 }

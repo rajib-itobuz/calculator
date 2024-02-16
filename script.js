@@ -3,10 +3,10 @@ const input = document.getElementById("input-bar");
 const output = document.getElementById("output");
 const themeChangeButton = document.getElementById("themeChange");
 
-const nonInputValues = ["AC", "DEL", "/", "*", "-", "+", "=", "%", "^", "π"];
+const nonInputValues = ["AC", "DEL", "/", "*", "-", "+", "=", "!", "^", "π"];
 const expression = [];
 let eqPressed = 0;
-const operators = ["^", "*", "/", "-", "+", "%"];
+const operators = ["^", "*", "/", "-", "+", "!"];
 
 const parseInput2 = (e) => {
   const buttonValue = e.target.textContent;
@@ -118,11 +118,13 @@ const changeTheme = (e) => {
 var precedence = (e) => {
   switch (e) {
     case "^":
+    case "!":
+      return 5;
+    case "%":
       return 4;
     case "*":
     case "/":
-    case "%":
-      return 3;
+      return 2;
     case "+":
     case "-":
       return 1;
@@ -159,6 +161,7 @@ const convertToPostfix = () => {
 // now calculate infix value using stack
 const calculateInfix = (postfixArray) => {
   const infixStack = [];
+  console.log(postfixArray);
 
   postfixArray.forEach((e) => {
     if (typeof e === "number") {
@@ -166,6 +169,9 @@ const calculateInfix = (postfixArray) => {
     } else {
       const val1 = infixStack.pop();
       const val2 = infixStack.pop();
+
+      console.log(e, val1, val2);
+
       switch (e) {
         case "*":
           infixStack.push(val2 * val1);
@@ -179,11 +185,16 @@ const calculateInfix = (postfixArray) => {
         case "+":
           infixStack.push(val2 + val1);
           break;
-        case "%":
-          if (typeof val2 === "undefined") infixStack.push(val1 / 100);
-          else {
-            infixStack.push(val2, (val2 * val1) / 100);
+        case "!":
+          let element = val1;
+          if (val1 > 0) {
+            for (let index = 1; index < val1; index++) {
+              element *= index;
+            }
+          } else if (val1 == 0) {
+            element = 1;
           }
+          infixStack.push(val2, element);
           break;
         case "^":
           const expValue = val2 ** val1;
@@ -211,7 +222,7 @@ addEventListener("keyup", (event) => {
       "-",
       "+",
       "=",
-      "%",
+      "!",
       "^",
       ".",
       "1",
