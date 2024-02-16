@@ -1,5 +1,5 @@
 const items = document.querySelectorAll(".item");
-const input = document.getElementById("input-bar");
+const input = document.getElementById("inputBar");
 const output = document.getElementById("output");
 const themeChangeButton = document.getElementById("themeChange");
 
@@ -21,7 +21,7 @@ const parseInput2 = (e) => {
     const currInp = parseFloat(input.value);
 
     // - digits
-    if (isNan && buttonValue == "-") {
+    if (isNan && buttonValue === "-") {
       eqPressed = 0;
       input.value += "-";
     }
@@ -87,7 +87,7 @@ const parseInput2 = (e) => {
       eqPressed = 0;
       if (input.value !== "") {
         input.value = input.value.substring(0, input.value.length - 1);
-      } else if (input.value == "") {
+      } else if (input.value === "") {
         if (expression.length > 1) {
           const lastExpression = expression.pop();
 
@@ -191,7 +191,7 @@ const calculateInfix = (postfixArray) => {
             for (let index = 1; index < val1; index++) {
               element *= index;
             }
-          } else if (val1 == 0) {
+          } else if (val1 === 0) {
             element = 1;
           }
           infixStack.push(val2, element);
