@@ -16,19 +16,23 @@ body {
 .theme-dark {
   background: linear-gradient(to right, #c31432, #240b36);
 }
+
 .theme-dark #calc-container {
   background-color: rgba(0, 0, 0, 0.3);
   color: white;
 }
+
 .theme-dark input {
   color: white;
 }
+
 .theme-dark .item {
   background-color: rgba(0, 0, 0, 0.3);
   -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
   color: white;
 }
+
 .theme-dark #themeChangeButton {
   filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(63deg) brightness(105%) contrast(104%);
 }
@@ -36,19 +40,23 @@ body {
 .theme-light {
   background: linear-gradient(90deg, #FDBB2D 0%, #22C1C3 100%);
 }
+
 .theme-light #calc-container {
   background-color: rgba(255, 255, 255, 0.8);
   color: black;
 }
+
 .theme-light input {
   color: #000;
 }
+
 .theme-light .item {
   background-color: rgba(255, 255, 255, 0.8);
   -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
   color: black;
 }
+
 .theme-light #themeChangeButton {
   filter: none;
 }
@@ -60,7 +68,7 @@ body {
   width: 90%;
   max-width: 500px;
   -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
 }
 
 .button-grid {
@@ -116,8 +124,11 @@ input {
     min-height: 120px;
     text-align: right;
   }
+
   .item {
     height: 70px;
     font-size: 25px;
   }
-}/*# sourceMappingURL=style.css.map */
+}
+
+/*# sourceMappingURL=style.css.map */
